@@ -21,6 +21,21 @@ class EstudianteController extends Controller
         return Estudiante::all();
     }
 
+    public function show($id){
+        $estudiante = Estudiante::find($id);
+        if(isset($estudiante)){
+            return response()->json([
+                'data'=>$estudiante,
+                'message' => 'Record with id '.$id.' found successfully.',
+            ]);
+        }
+        else
+            return response()->json([
+                'error' => true,
+                'message' => 'Record with id '.$id.' not found.',
+            ]);
+    }
+
     public function store(Request $request){
         $inputs = $request->input();
         $respuesta = Estudiante::create($inputs);
@@ -59,6 +74,29 @@ class EstudianteController extends Controller
             return response()->json([
                 'error'=> true,
                 'message'=> 'There is no estudiante with that id',
+            ]);
+        }
+    }
+
+    public function destroy($id){
+        $estudiante = Estudiante::find($id);
+        if(isset($estudiante)){
+            $response = Estudiante::destroy($id);
+            if(isset($response)){
+                return response()->json([
+                    'data' => $estudiante,
+                    'message' => 'Record with id '.$id.' successfully deleted.',
+                ]);
+            } else{
+                return response()->json([
+                    'error' => true,
+                    'message' => 'There was an error in the deletion process'
+                ]);
+            }
+        } else {
+            return response()->json([
+                'error' => true,
+                'message' => 'Record with id '.$id.' not found.',
             ]);
         }
     }
